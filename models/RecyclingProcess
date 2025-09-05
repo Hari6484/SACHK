@@ -1,0 +1,30 @@
+const mongoose = require('mongoose');
+
+const recyclingProcessSchema = new mongoose.Schema({
+  processId: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  inputMaterials: [String], // Material types that can be processed
+  outputProducts: [{
+    name: String,
+    yield: Number, // percentage of input converted to this output
+    quality: String
+  }],
+  energyRequired: { type: Number, required: true }, // kWh per kg
+  equipmentNeeded: [String],
+  processingTime: { type: Number, required: true }, // hours
+  efficiency: { type: Number, min: 0, max: 100 }, // percentage
+  operatorRequired: { type: Boolean, default: true },
+  automationLevel: {
+    type: String,
+    enum: ['manual', 'semi-automated', 'fully-automated'],
+    default: 'manual'
+  },
+  byproducts: [String],
+  safetyRating: {
+    type: String,
+    enum: ['safe', 'caution', 'hazardous'],
+    default: 'safe'
+  }
+});
+
+module.exports = mongoose.model('RecyclingProcess', recyclingProcessSchema);
